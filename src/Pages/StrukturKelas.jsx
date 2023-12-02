@@ -140,6 +140,7 @@ const StrukturKelas = () => {
         </div>
        </div>
      </div>
+     </div>
   </div>
 </div>
   );
