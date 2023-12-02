@@ -107,9 +107,37 @@ const StrukturKelas = () => {
               Width="120px"
             />
           </div>
-          <div data-aos="fade-up" data-aos-duration="120" className="">
-	  <img src="LineVertikal2.svg" alt="" className="relative top-[-3.8rem]" />
-	  </div>
+          <div className="flex flex-col justify-center items-center">
+        <img
+          src="LineVertikal.svg"
+          alt=""
+          data-aos="fade-up"
+          data-aos-duration="550"
+        />
+
+        <div className="lg:flex">
+          <img
+            src="LineHorizontal.svg"
+            alt=""
+            className="relative top-[-1rem]"
+            data-aos="fade-up"
+            data-aos-duration="600"
+          />
+          <img
+            src="LineHorizontal.svg"
+            alt=""
+            className="relative top-[-1rem] hidden lg:flex"
+            data-aos="fade-up"
+            data-aos-duration="600"
+          />
+          <img
+            src="LineHorizontal.svg"
+            alt=""
+            className="relative top-[-1rem] hidden lg:flex lg:w-[4.2rem]"
+            data-aos="fade-up"
+            data-aos-duration="600"
+          />
+        </div>
    </div>
   </div>
 </div>
