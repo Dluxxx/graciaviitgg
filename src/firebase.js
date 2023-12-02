@@ -15,8 +15,7 @@ const firebaseConfig = {
   projectId: "kelaswebgraciavii",
   storageBucket: "kelaswebgraciavii.appspot.com",
   messagingSenderId: "78780432839",
-  appId: "1:78780432839:web:3cc702224ff8df002a59e2",
-  measurementId: "G-MMR479HXRR"
+  appId: "1:78780432839:web:3cc702224ff8df002a59e2"
 };
 
 // Initialize Firebase
