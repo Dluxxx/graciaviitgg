@@ -108,8 +108,23 @@ const StrukturKelas = () => {
             />
           </div>
         </div>
-  </div>
-</div>
+
+        <div data-aos="fade-up" data-aos-duration="120" className="">
+          <img
+            src="LineVertikal.svg"
+            alt=""
+            className="relative top-[-3.9rem]"
+          />
+          <img src="Circle.svg" alt="" className="relative top-[-4.8rem]" />
+        </div>
+
+        {/* Seketaris dan bendahara */}
+        <div className="relative top-[-5rem] flex-col">
+          <BorderStruktur Jabatan="Sekertaris" Nama="Mozelle" Width="120px" />
+          <div className="py-[3%]"></div>
+        </div>
+      </div>
+    </div>
   );
 };
 
