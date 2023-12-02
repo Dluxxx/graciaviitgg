@@ -138,7 +138,9 @@ const StrukturKelas = () => {
             data-aos-duration="600"
           />
         </div>
-   </div>
+       </div>
+     </div>
+    </div>
   </div>
 </div>
   );
