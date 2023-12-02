@@ -116,7 +116,6 @@ const StrukturKelas = () => {
 	    <img src="Circle.svg" alt="" className="relative top-[-0.7rem]" />
 	    <div className="relative bottom-3">
 	    <BorderStruktur Jabatan="Sekretaris" Nama="Mozelle" Width="120px" />
-	    <div className="py-[3%]"></div>
 	    </div>
 	</div>
       </div>
