@@ -107,18 +107,9 @@ const StrukturKelas = () => {
               Width="120px"
             />
           </div>
-          <div
-            className=" absolute bottom-[14.5%] lg:hidden"
-	    data-aos="fade-up"
-	    data-aos-duration="1200">
-	    <div className="flex justify-center items-center flex-col">
-	    <img src="LineVertikal3.svg" alt="" className="lg:hidden" />
-	    <img src="Circle.svg" alt="" className="relative top-[-0.7rem]" />
-	    <div className="relative bottom-3">
-	    <BorderStruktur Jabatan="Sekretaris" Nama="Mozelle" Width="120px" />
-	    </div>
-	</div>
-      </div>
+          <div data-aos="fade-up" data-aos-duration="120" className="">
+	  <img src="LineVertikal2.svg" alt="" className="relative top-[-3.8rem]" />
+	  </div>
    </div>
   </div>
 </div>
