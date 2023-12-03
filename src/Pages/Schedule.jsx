@@ -94,7 +94,7 @@ const Schedule = () => {
           data-aos="fade-up"
           data-aos-duration="500"
         >
-          Picket
+          Piket
         </div>
         {currentPiketNames && currentPiketNames.length > 0 ? (
           currentPiketNames.map((piketName, index) => (
