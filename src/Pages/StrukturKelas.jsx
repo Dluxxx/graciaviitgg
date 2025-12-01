@@ -24,7 +24,7 @@ const StrukturKelas = () => {
       >
         <BorderStruktur
           Jabatan="Wali Kelas"
-          Nama="Dona Miranthie"
+          Nama="Ms. Ratna"
           Width="150px"
         />
       </div>
@@ -103,7 +103,7 @@ const StrukturKelas = () => {
           <div className="relative right-[0.2rem]">
             <BorderStruktur
               Jabatan="Wakil Ketua"
-              Nama="Nikeisha"
+              Nama="Zara"
               Width="120px"
             />
           </div>
@@ -120,7 +120,7 @@ const StrukturKelas = () => {
 
         {/* Seketaris dan bendahara */}
         <div className="relative top-[-5rem] flex-col">
-          <BorderStruktur Jabatan="Sekertaris" Nama="Mozelle" Width="120px" />
+          <BorderStruktur Jabatan="Sekertaris" Nama="-" Width="120px" />
           <div className="py-[3%]"></div>
         </div>
       </div>
@@ -129,3 +129,4 @@ const StrukturKelas = () => {
 };
 
 export default StrukturKelas;
+
