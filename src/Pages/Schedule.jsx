@@ -31,20 +31,22 @@ const Schedule = () => {
   // Menentukan kelompok piket berdasarkan minggu saat ini
   if (currentWeek === 2 || currentWeek === 4) {
     piketGroup = [
-      ["Axel", "Rava", "Andrea", "Marvel"],
-      ["Sharron", "Brandon", "Merlyn", "John"],
-      ["Chandra", ".", "Nikeisha", "Sifra"],
-      ["Deven", "Mozelle", "Jeremi", "Keren"],
-      ["Ethan", "Kris", "Grace", "Joseph"],
+      ["None"]
+      //["Axel", "Rava", "Andrea", "Marvel"],
+      //["Sharron", "Brandon", "Merlyn", "John"],
+      //["Chandra", ".", "Nikeisha", "Sifra"],
+      //["Deven", "Mozelle", "Jeremi", "Keren"],
+      //["Ethan", "Kris", "Grace", "Joseph"],
     ];
     /* sementara tuker week - masih perbaikan */
   } else if (currentWeek === 1 || currentWeek === 3) {
     piketGroup = [
-      ["Axel", "Rava", "Andrea", "Marvel"],
-      ["Sharron", "Brandon", "Merlyn", "John"],
-      ["Chandra", ".", "Nikeisha", "Sifra"],
-      ["Deven", "Mozelle", "Jeremi", "Keren"],
-      ["Ethan", "Kris", "Grace", "Joseph"],
+      ["None"]
+      //["Axel", "Rava", "Andrea", "Marvel"],
+      //["Sharron", "Brandon", "Merlyn", "John"],
+      //["Chandra", ".", "Nikeisha", "Sifra"],
+      //["Deven", "Mozelle", "Jeremi", "Keren"],
+      //["Ethan", "Kris", "Grace", "Joseph"],
     ];
   }
 
@@ -118,3 +120,4 @@ const Schedule = () => {
 };
 
 export default Schedule;
+
