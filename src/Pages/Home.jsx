@@ -8,7 +8,7 @@ const Home = () => {
       <Navbar />
       <div className="lg:hidden">
         <div className="font-bold text-5xl text-center py-20 ">
-          VII-I Gracia
+          IX-I Gracia
         </div>
         <div
           className="border-2 flex justify-between px-10 text-4xl font-bold py-2 relative"
@@ -18,7 +18,7 @@ const Home = () => {
             id="AngkaGradientBlue"
             className="flex items-center justify-center "
           >
-            11
+            9
           </div>
           <div className="">
             <span id="AngkaGradientBlue" className="text-5xl">
@@ -32,7 +32,7 @@ const Home = () => {
             id="AngkaGradientPink"
             className="flex items-center justify-center"
           >
-            9
+            11
           </div>
         </div>
 
@@ -54,7 +54,7 @@ const Home = () => {
             WELCOME
           </h1>
           <h6 className="text-sm" style={{ letterSpacing: "5px" }}>
-            TO VII-I Gracia
+            TO IX-1 Gracia
           </h6>
         </div>
       </div>
@@ -63,3 +63,4 @@ const Home = () => {
 };
 
 export default Home;
+
