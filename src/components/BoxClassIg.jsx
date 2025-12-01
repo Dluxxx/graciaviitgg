@@ -1,7 +1,7 @@
 const BoxClassIg = () => {
   return (
     <div id="BoxClassIg">
-      <a href="https://www.instagram.com/exposing.71/?hl=id">
+      <a href="https://www.instagram.com/unineverse.91/?hl=id">
         <div className="flex justify-between relative ">
           <img src="/Instagram.svg" alt="" className="w-auto h-10" />
           <img src="/next.png" alt="" className="h-4 w-4" />
@@ -18,3 +18,4 @@ const BoxClassIg = () => {
 };
 
 export default BoxClassIg;
+
