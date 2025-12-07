@@ -6,13 +6,13 @@
 :root {
 	--primary-color: #575c84;
 	--secondary-color: #686e9d;
-	--tertiary-color: #e06bd5;
+	--tertiary-color: #A03030; /* DIUBAH dari #e06bd5 (Pink/Ungu) ke Maroon Terang */
 	--quaternary-color: #18fff3;
 	--quinary-color: #ff775c;
 	--senary-color: #ff4359;
 	--septenary-color: #76ffb0;
-	--bg: #4b39c6;
-	--bg1: #e06bd5;
+	--bg: #800000; /* DIUBAH dari #4b39c6 (Biru Ungu) ke Maroon Utama */
+	--bg1: #A03030; /* DIUBAH dari #e06bd5 (Pink/Ungu) ke Maroon Terang */
 }
 
 html {
@@ -76,8 +76,8 @@ body {
 	height: auto;
 	background: radial-gradient(
 			circle,
-			rgba(224, 107, 213, 0.8520658263305322) 0%,
-			rgba(75, 57, 198, 0.9052871148459384) 100%
+			rgba(160, 48, 48, 0.85) 0%, /* DIUBAH dari rgba(224, 107, 213, 0.8520658263305322) ke Maroon Terang */
+			rgba(128, 0, 0, 0.90) 100% /* DIUBAH dari rgba(75, 57, 198, 0.9052871148459384) ke Maroon Utama */
 		),
 		url("/Background.jpeg");
 	background-repeat: no-repeat;
@@ -266,7 +266,7 @@ body {
 #Mesh1 {
 	width: 100%;
 	position: absolute;
-	background-image: radial-gradient(at -66% 56.8%, hsl(292, 93%, 53%) 0px, transparent 50%);
+	background-image: radial-gradient(at -66% 56.8%, hsl(0, 100%, 25%) 0px, transparent 50%); /* DIUBAH dari hsl(292, 93%, 53%) ke Merah/Maroon */
 	background-repeat: no-repeat, no-repeat;
 	z-index: -999;
 }
@@ -279,7 +279,7 @@ body {
 
 
 #Tabs {
-	background-image: radial-gradient(at 122.3% 55.5%, hsla(292, 93%, 53%, 0.492) 0px, transparent 50%),
+	background-image: radial-gradient(at 122.3% 55.5%, hsla(0, 100%, 25%, 0.492) 0px, transparent 50%), /* DIUBAH dari hsla(292, 93%, 53%, 0.492) ke Merah/Maroon */
 		radial-gradient(at 81.4% 65.2%, hsl(0, 0%, 12%) 0px, transparent 50%);
 }
 
@@ -355,7 +355,7 @@ body {
 	background-color: transparent; /* Warna thumb (opsional) */
 }
 
-/*  */
+/* */
 
 #ChatAnonim {
 	color: white;
@@ -404,8 +404,8 @@ input:focus {
 #Footer {
 	background: linear-gradient(
 		to top,
-		rgba(218, 9, 229, 0.39) 5%,
-		rgba(218, 9, 229, 0.149) 55%,
+		rgba(128, 0, 0, 0.39) 5%, /* DIUBAH dari rgba(218, 9, 229, 0.39) ke Maroon Utama */
+		rgba(128, 0, 0, 0.149) 55%, /* DIUBAH dari rgba(218, 9, 229, 0.149) ke Maroon Utama Transparan */
 		rgba(0, 0, 0, 0)
 	);
 }
