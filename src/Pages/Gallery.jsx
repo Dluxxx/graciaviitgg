@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import ButtonSend from "../components/ButtonSend";
 import ButtonRequest from "../components/ButtonRequest";
 
-import { supabase } from "../supabase";
+import { supabase } from "../supabase"; // Pastikan path ke supabase client benar
 
 import Modal from "@mui/material/Modal";
 import { IconButton } from "@mui/material";
@@ -34,7 +34,15 @@ const Carousel = () => {
       return;
     }
 
-    const result = files.map(file => {
+    // --- BAGIAN KODE UNTUK MEMFILTER FOLDER KOSONG ---
+    // Folder kosong Supabase memiliki file.metadata?.size = 0.
+    const actualFiles = files.filter(file => 
+      // Kita memastikan properti metadata ada dan ukurannya lebih dari 0.
+      file.metadata && file.metadata.size > 0
+    );
+    // --- AKHIR BAGIAN FILTER ---
+
+    const result = actualFiles.map(file => { // <-- Menggunakan actualFiles yang sudah difilter
       const url = supabase
         .storage
         .from("GambarAman")
@@ -47,7 +55,7 @@ const Carousel = () => {
           file.metadata?.description || "No description provided",
       };
     });
-
+    
     setImages(result);
   };
 
@@ -69,7 +77,8 @@ const Carousel = () => {
         settings: {
           arrows: false,
           centerMode: true,
-          centerPadding: "50px",
+          centerPadding: 
+"50px",
           slidesToShow: 1,
           dots: false,
         },
