@@ -4,156 +4,200 @@ import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import ButtonSend from "../components/ButtonSend"
 import ButtonRequest from "../components/ButtonRequest"
-import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage"
+import {
+  getStorage,
+  ref,
+  listAll,
+  getDownloadURL,
+  getMetadata,
+} from "firebase/storage"
 import Modal from "@mui/material/Modal"
-import { Box, IconButton } from "@mui/material"
+import { IconButton } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
-import { useSpring, animated } from "@react-spring/web" // Import the necessary components
+import { useSpring, animated } from "@react-spring/web"
 
 const Carousel = () => {
-	const [images, setImages] = useState([])
-	const [open, setOpen] = useState(false)
-	const [selectedImage, setSelectedImage] = useState(null)
+  const [images, setImages] = useState([])
+  const [open, setOpen] = useState(false)
+  const [selectedImage, setSelectedImage] = useState(null)
 
-	const modalFade = useSpring({
-		opacity: open ? 1 : 0,
-		config: { duration: 300 }, // Adjust the duration as needed
-	})
+  const modalFade = useSpring({
+    opacity: open ? 1 : 0,
+    config: { duration: 300 },
+  })
 
-	// Fungsi untuk mengambil daftar gambar dari Firebase Storage
-	const fetchImagesFromFirebase = async () => {
-		try {
-			const storage = getStorage() // Mendapatkan referensi Firebase Storage
-			const storageRef = ref(storage, "GambarAman/") // Menggunakan ref dengan storage
+  // 🔥 FETCH GAMBAR + DESKRIPSI (METADATA FIREBASE)
+  const fetchImagesFromFirebase = async () => {
+    try {
+      const storage = getStorage()
+      const storageRef = ref(storage, "GambarAman/")
 
-			const imagesList = await listAll(storageRef) // Menggunakan listAll untuk mendapatkan daftar gambar
+      const imagesList = await listAll(storageRef)
 
-			const imageURLs = await Promise.all(
-				imagesList.items.map(async (item) => {
-					const url = await getDownloadURL(item) // Menggunakan getDownloadURL untuk mendapatkan URL gambar
-					return url
-				}),
-			)
+      const imageData = await Promise.all(
+        imagesList.items.map(async (item) => {
+          const url = await getDownloadURL(item)
 
-			setImages(imageURLs)
-		} catch (error) {
-			console.error("Error fetching images from Firebase Storage:", error)
-		}
-	}
+          let description = "No description provided"
 
-	useEffect(() => {
-		fetchImagesFromFirebase()
-	}, [])
+          try {
+            const metadata = await getMetadata(item)
 
-	const settings = {
-		centerMode: true,
-		centerPadding: "30px",
-		slidesToShow: 3,
-		slidesToScroll: 1,
-		autoplay: true,
-		autoplaySpeed: 2000,
-		dots: true,
-		responsive: [
-			{
-				breakpoint: 768,
-				settings: {
-					arrows: false,
-					centerMode: true,
-					centerPadding: "50px",
-					slidesToShow: 1,
-					dots: false,
-				},
-			},
-			{
-				breakpoint: 480,
-				settings: {
-					arrows: false,
-					centerMode: true,
-					centerPadding: "70px",
-					slidesToShow: 1,
-					dots: false,
-				},
-			},
-		],
-	}
+            if (
+              metadata.customMetadata &&
+              metadata.customMetadata.description
+            ) {
+              description = metadata.customMetadata.description
+            }
+          } catch (err) {
+            console.warn("Metadata missing:", item.name)
+          }
 
-	const handleImageClick = (imageUrl) => {
-		setSelectedImage(imageUrl)
-		setOpen(true)
-	}
+          return {
+            url,
+            description,
+            filename: item.name,
+          }
+        })
+      )
 
-	const handleCloseModal = () => {
-		setOpen(false)
-		setSelectedImage(null)
-	}
+      setImages(imageData)
+    } catch (error) {
+      console.error("Error fetching images + metadata:", error)
+    }
+  }
 
-	return (
-		<>
-			<div className="text-white opacity-60 text-base font-semibold mb-4 mx-[10%] mt-10 lg:text-center lg:text-3xl lg:mb-8" id="Gallery">
-				Class Gallery
-			</div>
-			<div id="Carousel">
-				<Slider {...settings}>
-					{images.map((imageUrl, index) => (
-						<img
-							key={index}
-							src={imageUrl}
-							alt={`Image ${index}`}
-							onClick={() => handleImageClick(imageUrl)}
-							style={{ cursor: "pointer" }}
-						/>
-					))}
-				</Slider>
-			</div>
+  useEffect(() => {
+    fetchImagesFromFirebase()
+  }, [])
 
-			<div className="flex justify-center items-center gap-6 text-base mt-5 lg:mt-8">
-				<ButtonSend />
-				<ButtonRequest />
-			</div>
+  const settings = {
+    centerMode: true,
+    centerPadding: "30px",
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    dots: true,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          arrows: false,
+          centerMode: true,
+          centerPadding: "50px",
+          slidesToShow: 1,
+          dots: false,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          arrows: false,
+          centerMode: true,
+          centerPadding: "70px",
+          slidesToShow: 1,
+          dots: false,
+        },
+      },
+    ],
+  }
 
-			<Modal
-				open={open}
-				onClose={handleCloseModal}
-				aria-labelledby="image-modal"
-				aria-describedby="image-modal-description"
-				className="flex justify-center items-center">
-				<animated.div
-					style={{
-						...modalFade,
-						maxWidth: "90vw",
-						maxHeight: "auto",
-						display: "flex",
-						flexDirection: "column",
-						justifyContent: "center",
-						alignItems: "center",
-						position: "relative",
-					}}
-					className="p-2 rounded-lg">
-					<IconButton
-						edge="end"
-						color="inherit"
-						onClick={handleCloseModal}
-						aria-label="close"
-						sx={{
-							position: "absolute",
-							top: "12px",
-							right: "23px",
-							backgroundColor: "white",
-							borderRadius: "50%",
-						}}>
-						<CloseIcon />
-					</IconButton>
-					<div className="w-full">
-						<img
-							src={selectedImage}
-							alt="Selected Image"
-							style={{ maxWidth: "100%", maxHeight: "100vh" }}
-						/>
-					</div>
-				</animated.div>
-			</Modal>
-		</>
-	)
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl)
+    setOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setOpen(false)
+    setSelectedImage(null)
+  }
+
+  return (
+    <>
+      <div
+        className="text-white opacity-60 text-base font-semibold mb-4 mx-[10%] mt-10 lg:text-center lg:text-3xl lg:mb-8"
+        id="Gallery"
+      >
+        Class Gallery
+      </div>
+
+      <div id="Carousel">
+        <Slider {...settings}>
+          {images.map((img, index) => (
+            <div
+              key={index}
+              className="relative group"
+              onClick={() => handleImageClick(img.url)}
+            >
+              <img
+                src={img.url}
+                alt={img.filename}
+                className="cursor-pointer"
+              />
+
+              {/* 🔥 Overlay deskripsi */}
+              <div
+                className="
+                absolute bottom-0 left-0 right-0 
+                bg-black bg-opacity-60 text-white text-xs p-2
+                opacity-0 group-hover:opacity-100 transition-opacity duration-200
+              "
+              >
+                {img.description}
+              </div>
+            </div>
+          ))}
+        </Slider>
+      </div>
+
+      <div className="flex justify-center items-center gap-6 text-base mt-5 lg:mt-8">
+        <ButtonSend />
+        <ButtonRequest />
+      </div>
+
+      {/* MODAL ZOOM */}
+      <Modal
+        open={open}
+        onClose={handleCloseModal}
+        className="flex justify-center items-center"
+      >
+        <animated.div
+          style={{
+            ...modalFade,
+            maxWidth: "90vw",
+            maxHeight: "auto",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "relative",
+          }}
+          className="p-2 rounded-lg"
+        >
+          <IconButton
+            edge="end"
+            onClick={handleCloseModal}
+            sx={{
+              position: "absolute",
+              top: "12px",
+              right: "23px",
+              backgroundColor: "white",
+              borderRadius: "50%",
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          <img
+            src={selectedImage}
+            alt="Selected"
+            style={{ maxWidth: "100%", maxHeight: "100vh" }}
+          />
+        </animated.div>
+      </Modal>
+    </>
+  )
 }
 
 export default Carousel
