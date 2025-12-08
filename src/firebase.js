@@ -5,12 +5,12 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 // Konfigurasi Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyB5dhGx6pqMT-m--31IsznkNOxdKBRkKqY",
-  authDomain: "kelaswebgraciavii.firebaseapp.com",
-  projectId: "kelaswebgraciavii",
-  storageBucket: "kelaswebgraciavii.appspot.com",
-  messagingSenderId: "78780432839",
-  appId: "1:78780432839:web:3cc702224ff8df002a59e2"
+  apiKey: "AIzaSyAEmp4YcCkOdG109rRh5T5u_-b4cSTVnq8",
+  authDomain: "grcas-33e8c.firebaseapp.com",
+  projectId: "grcas-33e8c",
+  storageBucket: "grcas-33e8c.firebasestorage.app",
+  messagingSenderId: "563510995880",
+  appId: "1:563510995880:web:989a764b880ef9744e4b9d"
 };
 
 // Init Firebase
@@ -20,3 +20,4 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
+
