@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../supabase";
 import { v4 as uuidv4 } from "uuid";
 import Swal from "sweetalert2";
 
@@ -160,3 +160,4 @@ function UploadImage() {
 }
 
 export default UploadImage;
+
