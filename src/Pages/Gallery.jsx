@@ -1,75 +1,59 @@
-import React, { useEffect, useState } from "react"
-import Slider from "react-slick"
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
-import ButtonSend from "../components/ButtonSend"
-import ButtonRequest from "../components/ButtonRequest"
-import {
-  getStorage,
-  ref,
-  listAll,
-  getDownloadURL,
-  getMetadata,
-} from "firebase/storage"
-import Modal from "@mui/material/Modal"
-import { IconButton } from "@mui/material"
-import CloseIcon from "@mui/icons-material/Close"
-import { useSpring, animated } from "@react-spring/web"
+import React, { useEffect, useState } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import ButtonSend from "../components/ButtonSend";
+import ButtonRequest from "../components/ButtonRequest";
+
+import { supabase } from "../supabase";
+
+import Modal from "@mui/material/Modal";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { useSpring, animated } from "@react-spring/web";
 
 const Carousel = () => {
-  const [images, setImages] = useState([])
-  const [open, setOpen] = useState(false)
-  const [selectedImage, setSelectedImage] = useState(null)
+  const [images, setImages] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const modalFade = useSpring({
     opacity: open ? 1 : 0,
     config: { duration: 300 },
-  })
+  });
 
-  // 🔥 FETCH GAMBAR + DESKRIPSI (METADATA FIREBASE)
-  const fetchImagesFromFirebase = async () => {
-    try {
-      const storage = getStorage()
-      const storageRef = ref(storage, "GambarAman/")
+  // 🚀 FETCH GAMBAR + METADATA DARI SUPABASE
+  const fetchImagesFromSupabase = async () => {
+    const { data: files, error } = await supabase
+      .storage
+      .from("GambarAman")
+      .list("", { limit: 200, includeMetadata: true });
 
-      const imagesList = await listAll(storageRef)
-
-      const imageData = await Promise.all(
-        imagesList.items.map(async (item) => {
-          const url = await getDownloadURL(item)
-
-          let description = "No description provided"
-
-          try {
-            const metadata = await getMetadata(item)
-
-            if (
-              metadata.customMetadata &&
-              metadata.customMetadata.description
-            ) {
-              description = metadata.customMetadata.description
-            }
-          } catch (err) {
-            console.warn("Metadata missing:", item.name)
-          }
-
-          return {
-            url,
-            description,
-            filename: item.name,
-          }
-        })
-      )
-
-      setImages(imageData)
-    } catch (error) {
-      console.error("Error fetching images + metadata:", error)
+    if (error) {
+      console.error("Error fetching files:", error);
+      return;
     }
-  }
+
+    const result = files.map(file => {
+      const url = supabase
+        .storage
+        .from("GambarAman")
+        .getPublicUrl(file.name).data.publicUrl;
+
+      return {
+        url,
+        filename: file.name,
+        description:
+          file.metadata?.description || "No description provided",
+      };
+    });
+
+    setImages(result);
+  };
 
   useEffect(() => {
-    fetchImagesFromFirebase()
-  }, [])
+    fetchImagesFromSupabase();
+  }, []);
 
   const settings = {
     centerMode: true,
@@ -101,17 +85,17 @@ const Carousel = () => {
         },
       },
     ],
-  }
+  };
 
-  const handleImageClick = (imageUrl) => {
-    setSelectedImage(imageUrl)
-    setOpen(true)
-  }
+  const handleImageClick = (url) => {
+    setSelectedImage(url);
+    setOpen(true);
+  };
 
   const handleCloseModal = () => {
-    setOpen(false)
-    setSelectedImage(null)
-  }
+    setOpen(false);
+    setSelectedImage(null);
+  };
 
   return (
     <>
@@ -136,13 +120,13 @@ const Carousel = () => {
                 className="cursor-pointer"
               />
 
-              {/* 🔥 Overlay deskripsi */}
+              {/* Overlay Deskripsi */}
               <div
                 className="
-                absolute bottom-0 left-0 right-0 
-                bg-black bg-opacity-60 text-white text-xs p-2
-                opacity-0 group-hover:opacity-100 transition-opacity duration-200
-              "
+                  absolute bottom-0 left-0 right-0 
+                  bg-black bg-opacity-60 text-white text-xs p-2
+                  opacity-0 group-hover:opacity-100 transition-opacity duration-200
+                "
               >
                 {img.description}
               </div>
@@ -197,7 +181,7 @@ const Carousel = () => {
         </animated.div>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default Carousel
+export default Carousel;
