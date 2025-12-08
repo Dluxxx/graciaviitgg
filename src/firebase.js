@@ -1,14 +1,9 @@
-// Import the functions you need from the SDKs you need
+// Import Firebase (untuk Auth & Firestore saja)
 import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage";
-import { getFirestore } from "firebase/firestore"
+import { getFirestore } from "firebase/firestore";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
-import {getAuth, GoogleAuthProvider} from 'firebase/auth'
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
+// Konfigurasi Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyB5dhGx6pqMT-m--31IsznkNOxdKBRkKqY",
   authDomain: "kelaswebgraciavii.firebaseapp.com",
@@ -18,10 +13,10 @@ const firebaseConfig = {
   appId: "1:78780432839:web:3cc702224ff8df002a59e2"
 };
 
-// Initialize Firebase
+// Init Firebase
 const app = initializeApp(firebaseConfig);
-export const storage = getStorage(app);
 
+// EXPORT hanya yang kamu mau tetap pakai
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
