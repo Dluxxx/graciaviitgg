@@ -1,8 +1,7 @@
-// src/Pages/GalleryAdmin/ApprovedGallery.jsx
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 import ApprovedImageCard from "./ApprovedImageCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function ApprovedGallery() {
 
@@ -14,11 +13,9 @@ export default function ApprovedGallery() {
   }, []);
 
   const BUCKET = "GambarAman";
-
   const [files, setFiles] = useState([]);
 
   const load = async () => {
-
     const { data, error } = await supabase.storage
       .from(BUCKET)
       .list("", { includeMetadata: true });
@@ -33,7 +30,6 @@ export default function ApprovedGallery() {
     }));
 
     mapped.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
     setFiles(mapped);
   };
 
@@ -41,13 +37,24 @@ export default function ApprovedGallery() {
 
   return (
     <div className="p-6 text-white">
-      <h1 className="text-3xl font-bold mb-6">Approved Gallery</h1>
+
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold">Approved Gallery</h1>
+
+        <Link
+          to="/admin/gallery"
+          className="bg-gray-700 px-4 py-2 rounded-lg"
+        >
+          ← Pending Review
+        </Link>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {files.map((f) => (
-          <ApprovedImageCard key={f.name} file={f} onDone={load}/>
+          <ApprovedImageCard key={f.name} file={f} onDone={load} />
         ))}
       </div>
+
     </div>
   );
 }
