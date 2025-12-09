@@ -1,6 +1,6 @@
 // src/pages/GalleryAdmin/AdminImageCard.jsx
 import React, { useState } from "react";
-import { supabase } from "../supabase";
+import { supabase } from "../../supabase";
 
 export default function AdminImageCard({ file, onDone }) {
   const [editing, setEditing] = useState(false);
