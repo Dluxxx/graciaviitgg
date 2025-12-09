@@ -1,10 +1,10 @@
-// src/Pages/GalleryAdmin/ApprovedImageCard.jsx
 import React, { useState } from "react";
 import { supabase } from "../../supabase";
 
 export default function ApprovedImageCard({ file, onDone }) {
 
   const BUCKET = "GambarAman";
+
   const [editing, setEditing] = useState(false);
   const [desc, setDesc] = useState(file.description);
   const [busy, setBusy] = useState(false);
@@ -12,12 +12,12 @@ export default function ApprovedImageCard({ file, onDone }) {
   const saveDesc = async () => {
     setBusy(true);
 
-    // Download file dulu
+    // Download file
     const { data: downloaded } = await supabase.storage
       .from(BUCKET)
       .download(file.name);
 
-    // Reupload + metadata baru
+    // Re-upload update metadata
     await supabase.storage
       .from(BUCKET)
       .upload(file.name, downloaded, {
@@ -34,9 +34,7 @@ export default function ApprovedImageCard({ file, onDone }) {
     if (!confirm("Delete this approved image?")) return;
 
     setBusy(true);
-
     await supabase.storage.from(BUCKET).remove([file.name]);
-
     setBusy(false);
     onDone();
   };
@@ -44,26 +42,29 @@ export default function ApprovedImageCard({ file, onDone }) {
   return (
     <div className="bg-gray-800 p-4 rounded-lg">
 
-      <img src={file.url} className="w-full h-48 object-cover rounded-lg" />
+      <img
+        src={file.url}
+        className="w-full h-48 object-cover rounded-lg"
+      />
 
       {editing ? (
         <>
           <input
-            className="p-2 w-full rounded mt-3 text-black"
+            className="p-2 text-black w-full rounded mt-3"
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
           />
 
           <button
             onClick={saveDesc}
-            className="px-3 py-1 bg-blue-600 rounded mt-2"
+            className="bg-blue-600 px-3 py-1 rounded mt-3"
           >
             Save
           </button>
 
           <button
             onClick={() => setEditing(false)}
-            className="px-3 py-1 bg-gray-600 rounded mt-2 ml-2"
+            className="bg-gray-600 px-3 py-1 rounded mt-3 ml-2"
           >
             Cancel
           </button>
@@ -74,20 +75,20 @@ export default function ApprovedImageCard({ file, onDone }) {
 
           <button
             onClick={() => setEditing(true)}
-            className="px-3 py-1 bg-yellow-600 rounded mt-2"
+            className="bg-yellow-600 px-3 py-1 rounded mt-3"
           >
             Edit
           </button>
 
           <button
             onClick={deleteFile}
-            className="px-3 py-1 bg-red-600 rounded mt-2 ml-2"
-            disabled={busy}
+            className="bg-red-600 px-3 py-1 rounded mt-3 ml-2"
           >
             Delete
           </button>
         </>
       )}
+
     </div>
   );
 }
