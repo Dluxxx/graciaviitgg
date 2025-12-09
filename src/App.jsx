@@ -9,11 +9,13 @@ import Chat from "./components/ChatAnonim";
 
 import AdminLogin from "./Pages/AdminLogin";
 import GalleryAdmin from "./Pages/GalleryAdmin";
+import ApprovedGallery from "./Pages/GalleryAdmin/ApprovedGallery";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
 
 function App() {
+
   useEffect(() => {
     AOS.init();
     AOS.refresh();
@@ -23,6 +25,7 @@ function App() {
     <Router>
       <Routes>
 
+        {/* PUBLIC */}
         <Route
           path="/"
           element={
@@ -47,9 +50,10 @@ function App() {
           }
         />
 
+        {/* ADMIN */}
         <Route path="/admin" element={<AdminLogin />} />
-
         <Route path="/admin/gallery" element={<GalleryAdmin />} />
+        <Route path="/admin/gallery/approved" element={<ApprovedGallery />} />
 
       </Routes>
     </Router>
