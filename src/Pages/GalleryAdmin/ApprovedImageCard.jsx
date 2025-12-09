@@ -12,31 +12,41 @@ export default function ApprovedImageCard({ file, onDone }) {
 const saveDesc = async () => {
   setBusy(true);
 
-  // 1) Download file
-  const { data: fileBlob, error: dErr } = await supabase.storage
+  const BUCKET = "GambarAman";
+
+  // 1. Download the file
+  const { data: fileBlob, error: downloadErr } = await supabase.storage
     .from(BUCKET)
     .download(file.name);
 
-  if (dErr) {
-    alert("Download error");
+  if (downloadErr || !fileBlob) {
+    alert("Failed to download file");
     setBusy(false);
     return;
   }
 
-  // 2) Ambil contentType asli
+  // 2. Get the original content type
   const contentType = fileBlob.type || "image/jpeg";
 
-  // 3) Upload ulang dengan metadata BARU
-  const { error: uErr } = await supabase.storage
+  // 3. Convert blob into ArrayBuffer (Supabase likes this format best)
+  const arrayBuffer = await fileBlob.arrayBuffer();
+
+  // 4. Reupload the file with updated metadata
+  const { error: updateErr } = await supabase.storage
     .from(BUCKET)
-    .upload(file.name, fileBlob, {
+    .upload(file.name, arrayBuffer, {
       upsert: true,
-      metadata: { description: desc },
-      contentType,            // FIX WAJIB
-      cacheControl: "0"       // FIX WAJIB
+      contentType: contentType,
+      cacheControl: "3600",
+      metadata: { description: desc }
     });
 
-  if (uErr) alert("Failed updating metadata");
+  if (updateErr) {
+    console.error(updateErr);
+    alert(`Failed updating metadata, ${updateErr}`);
+    setBusy(false);
+    return;
+  }
 
   setBusy(false);
   setEditing(false);
