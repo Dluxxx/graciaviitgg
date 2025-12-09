@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 import { useNavigate } from "react-router-dom";
-import AdminImageCard from "./AdminImageCard";
+import AdminImageCard from "../AdminImageCard";
 
 export default function GalleryAdmin() {
   const navigate = useNavigate();
