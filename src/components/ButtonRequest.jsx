@@ -24,7 +24,6 @@ export default function ButtonRequest() {
 
   // Fetch images from Supabase Storage
   const fetchImagesFromSupabase = async () => {
-    // ... (Fungsi fetchImagesFromSupabase tetap sama)
     const { data: files, error } = await supabase.storage
       .from("images")
       .list("", { includeMetadata: true });
@@ -34,10 +33,11 @@ export default function ButtonRequest() {
       return;
     }
 
-    // Filter file yang merupakan folder kosong/placeholder Supabase
-    const actualFiles = files.filter(file => 
-      file.metadata && file.metadata.size > 0
-    );
+    // Filter file yang merupakan placeholder folder kosong atau file 0-byte
+    const actualFiles = files.filter(file => {
+      // Pastikan file memiliki metadata, ukuran > 0, dan bukan nama placeholder umum
+      return file.metadata && file.metadata.size > 0 && file.name !== '.emptyFolderPlaceholder';
+    });
 
     const mapped = actualFiles.map((file) => {
       const url = supabase.storage.from("images").getPublicUrl(file.name).data.publicUrl;
@@ -104,19 +104,18 @@ export default function ButtonRequest() {
                       className="flex justify-between items-center px-5 py-2 mt-2"
                       id="LayoutIsiButtonRequest"
                     >
-                      {/* --- MODIFIKASI: MENAMBAHKAN PROPERTI ANTI-DOWNLOAD --- */}
                       <img 
                         src={img.url} 
                         alt="" 
-                        className="h-10 w-10 blur-sm" 
+                        className="h-10 w-10 blur-sm"
+                        // Properti Anti-Download
                         style={{ 
-                          pointerEvents: 'none', // Mencegah interaksi mouse, termasuk klik kanan
-                          userSelect: 'none',     // Mencegah pemilihan teks/gambar
+                          pointerEvents: 'none', 
+                          userSelect: 'none',     
                         }}
-                        onContextMenu={(e) => e.preventDefault()} // Mencegah menu konteks (klik kanan)
-                        draggable="false" // Mencegah drag and drop
+                        onContextMenu={(e) => e.preventDefault()} 
+                        draggable="false" 
                       />
-                      {/* --------------------------------------------------- */}
                       
                       <span className="ml-2 text-white">
                         {img.timestamp
@@ -129,7 +128,7 @@ export default function ButtonRequest() {
               </div>
 
               <div className="text-white text-[0.7rem] mt-5">
-                Note : Semua gambar yang diupload akan difilter terlebih dahulu sebelum diupload.
+                Note : Seluruh gambar yang di request akan di filter dahulu sebelum diupload.
               </div>
             </Typography>
           </Box>
@@ -138,4 +137,6 @@ export default function ButtonRequest() {
     </div>
   );
 }
+
+
 
