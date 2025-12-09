@@ -129,7 +129,7 @@ export default function ButtonRequest() {
               </div>
 
               <div className="text-white text-[0.7rem] mt-5">
-                Note : Jika tidak ada gambar yang sudah anda upload silahkan reload
+                Note : Semua gambar yang diupload akan difilter terlebih dahulu sebelum diupload.
               </div>
             </Typography>
           </Box>
@@ -138,3 +138,4 @@ export default function ButtonRequest() {
     </div>
   );
 }
+
