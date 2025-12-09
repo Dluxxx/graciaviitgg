@@ -1,6 +1,6 @@
 // src/pages/GalleryAdmin/index.jsx
 import React, { useEffect, useState } from "react";
-import { supabase } from "../supabase";
+import { supabase } from "../../supabase";
 import { useNavigate } from "react-router-dom";
 import AdminImageCard from "./AdminImageCard";
 
