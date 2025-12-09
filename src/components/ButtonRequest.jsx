@@ -24,6 +24,7 @@ export default function ButtonRequest() {
 
   // Fetch images from Supabase Storage
   const fetchImagesFromSupabase = async () => {
+    // ... (Fungsi fetchImagesFromSupabase tetap sama)
     const { data: files, error } = await supabase.storage
       .from("images")
       .list("", { includeMetadata: true });
@@ -33,7 +34,12 @@ export default function ButtonRequest() {
       return;
     }
 
-    const mapped = files.map((file) => {
+    // Filter file yang merupakan folder kosong/placeholder Supabase
+    const actualFiles = files.filter(file => 
+      file.metadata && file.metadata.size > 0
+    );
+
+    const mapped = actualFiles.map((file) => {
       const url = supabase.storage.from("images").getPublicUrl(file.name).data.publicUrl;
 
       return {
@@ -98,7 +104,20 @@ export default function ButtonRequest() {
                       className="flex justify-between items-center px-5 py-2 mt-2"
                       id="LayoutIsiButtonRequest"
                     >
-                      <img src={img.url} alt="" className="h-10 w-10 blur-sm" />
+                      {/* --- MODIFIKASI: MENAMBAHKAN PROPERTI ANTI-DOWNLOAD --- */}
+                      <img 
+                        src={img.url} 
+                        alt="" 
+                        className="h-10 w-10 blur-sm" 
+                        style={{ 
+                          pointerEvents: 'none', // Mencegah interaksi mouse, termasuk klik kanan
+                          userSelect: 'none',     // Mencegah pemilihan teks/gambar
+                        }}
+                        onContextMenu={(e) => e.preventDefault()} // Mencegah menu konteks (klik kanan)
+                        draggable="false" // Mencegah drag and drop
+                      />
+                      {/* --------------------------------------------------- */}
+                      
                       <span className="ml-2 text-white">
                         {img.timestamp
                           ? new Date(img.timestamp).toLocaleString()
