@@ -1,6 +1,6 @@
 // src/Pages/GalleryAdmin/ApprovedGallery.jsx
 import React, { useEffect, useState } from "react";
-import { supabase } from "../../supabase/supabase";
+import { supabase } from "../../supabase";
 import ApprovedImageCard from "./ApprovedImageCard";
 import { useNavigate } from "react-router-dom";
 
