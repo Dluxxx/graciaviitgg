@@ -9,26 +9,39 @@ export default function ApprovedImageCard({ file, onDone }) {
   const [desc, setDesc] = useState(file.description);
   const [busy, setBusy] = useState(false);
 
-  const saveDesc = async () => {
-    setBusy(true);
+const saveDesc = async () => {
+  setBusy(true);
 
-    // Download file
-    const { data: downloaded } = await supabase.storage
-      .from(BUCKET)
-      .download(file.name);
+  // 1) Download file
+  const { data: fileBlob, error: dErr } = await supabase.storage
+    .from(BUCKET)
+    .download(file.name);
 
-    // Re-upload update metadata
-    await supabase.storage
-      .from(BUCKET)
-      .upload(file.name, downloaded, {
-        upsert: true,
-        metadata: { description: desc },
-      });
-
+  if (dErr) {
+    alert("Download error");
     setBusy(false);
-    setEditing(false);
-    onDone();
-  };
+    return;
+  }
+
+  // 2) Ambil contentType asli
+  const contentType = fileBlob.type || "image/jpeg";
+
+  // 3) Upload ulang dengan metadata BARU
+  const { error: uErr } = await supabase.storage
+    .from(BUCKET)
+    .upload(file.name, fileBlob, {
+      upsert: true,
+      metadata: { description: desc },
+      contentType,            // FIX WAJIB
+      cacheControl: "0"       // FIX WAJIB
+    });
+
+  if (uErr) alert("Failed updating metadata");
+
+  setBusy(false);
+  setEditing(false);
+  onDone();
+};
 
   const deleteFile = async () => {
     if (!confirm("Delete this approved image?")) return;
