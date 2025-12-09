@@ -1,105 +1,60 @@
-// src/pages/GalleryAdmin/index.jsx
+// PENDING REVIEW PAGE: bucket Images
 import React, { useEffect, useState } from "react";
-import { supabase } from "../../supabase";
-import { useNavigate } from "react-router-dom";
-import AdminImageCard from "./AdminImageCard";
+import { supabase } from "../../supabase/supabase";
+import PendingImageCard from "./PendingImageCard";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function GalleryAdmin() {
+
   const navigate = useNavigate();
 
-  // CEK LOGIN ADMIN
   useEffect(() => {
-    const isAdmin = localStorage.getItem("admin-auth");
-    if (!isAdmin) navigate("/admin");
+    const admin = localStorage.getItem("admin-auth");
+    if (!admin) navigate("/admin");
   }, []);
 
+  const BUCKET = "Images";
+
   const [files, setFiles] = useState([]);
-  const [selected, setSelected] = useState(null);
-  const [description, setDescription] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const loadFiles = async () => {
-    setLoading(true);
-
+  const load = async () => {
     const { data, error } = await supabase.storage
-      .from("images")
+      .from(BUCKET)
       .list("", { includeMetadata: true });
 
-    if (error) {
-      console.error(error);
-      setLoading(false);
-      return;
-    }
+    if (error) return console.error(error);
 
     const mapped = data.map((file) => ({
       name: file.name,
-      url: supabase.storage.from("images").getPublicUrl(file.name).data.publicUrl,
-      description: file.metadata?.description || "No description provided",
+      url: supabase.storage.from(BUCKET).getPublicUrl(file.name).data.publicUrl,
+      description: file.metadata?.description || "No description",
       created_at: file.created_at,
     }));
 
     mapped.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
     setFiles(mapped);
-    setLoading(false);
   };
 
-  useEffect(() => loadFiles(), []);
-
-  const upload = async () => {
-    if (!selected) return alert("Select a file first!");
-
-    setLoading(true);
-
-    const fileName = `${Date.now()}-${selected.name}`;
-
-    const { error } = await supabase.storage.from("images").upload(fileName, selected, {
-      upsert: true,
-      metadata: { description: description || "No description provided" }
-    });
-
-    if (error) {
-      console.error(error);
-      alert("Upload failed");
-    } else {
-      alert("Uploaded!");
-    }
-
-    setSelected(null);
-    setDescription("");
-    await loadFiles();
-    setLoading(false);
-  };
+  useEffect(() => load(), []);
 
   return (
     <div className="p-6 text-white">
-      <h1 className="text-3xl font-bold mb-6">Gallery Admin</h1>
 
-      <div className="bg-gray-800 rounded-lg p-5 mb-6">
-        <input type="file" onChange={(e) => setSelected(e.target.files[0])} className="mb-3" />
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold">Pending Review</h1>
 
-        <input
-          type="text"
-          placeholder="Description…"
-          className="w-full p-2 text-black mb-3 rounded-lg"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
-        <button
-          onClick={upload}
-          className="bg-green-600 px-4 py-2 rounded-lg font-semibold hover:bg-green-700"
-          disabled={loading}
+        <Link
+          to="/admin/gallery/approved"
+          className="bg-blue-600 px-4 py-2 rounded-lg"
         >
-          {loading ? "Uploading…" : "Upload"}
-        </button>
+          Approved Gallery →
+        </Link>
       </div>
 
-      <h2 className="text-xl font-semibold mb-4">All Photos</h2>
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {files.map((file) => (
-          <AdminImageCard key={file.name} file={file} onDone={loadFiles} />
+        {files.map((f) => (
+          <PendingImageCard key={f.name} file={f} onDone={load} />
         ))}
       </div>
     </div>
